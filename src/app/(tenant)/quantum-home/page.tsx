@@ -307,7 +307,7 @@ export default function HomePage() {
             
             <div className="w-full border-t border-slate-50 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
                 <div className="text-[10px] uppercase font-black tracking-[0.3em] text-slate-300">
-                    © 2026 {PLATFORM_CONFIG.institutionName} • Powered by Antigravity Labs
+                    © 2026 {PLATFORM_CONFIG.institutionName}
                 </div>
                 <div className="flex gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                     <a href="#" className="hover:text-blue-600">Privacy</a>
