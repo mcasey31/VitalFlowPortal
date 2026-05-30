@@ -11,16 +11,40 @@ export const telemedicineRouter = createTRPCRouter({
     .input(z.object({ specialty: z.string() }))
     .mutation(async ({ ctx, input }) => {
       console.log("--- INICIO MUTATION joinQueue ---");
-      const userId = ctx.session.user.id;
-      
-      // 1. Aseguramos perfil de paciente vinculado al usuario
-      const patient = await ctx.db.patient.upsert({
-        where: { userId: userId },
-        update: {},
-        create: {
-            userId: userId,
-            onboardingCompleted: true
-        }
+      const sessionUserId = ctx.session.user.id;
+      const sessionEmail = ctx.session.user.email ?? null;
+      const sessionName = ctx.session.user.name ?? "Paciente";
+
+      // 1. Normalizamos identidad de usuario para evitar FK huérfana en Patient.userId.
+      // Si existe email, tomamos ese registro como fuente de verdad.
+      const patient = await ctx.db.$transaction(async (tx) => {
+        const user = sessionEmail
+          ? await tx.user.upsert({
+              where: { email: sessionEmail },
+              update: { name: sessionName },
+              create: {
+                id: sessionUserId,
+                email: sessionEmail,
+                name: sessionName,
+              },
+            })
+          : await tx.user.upsert({
+              where: { id: sessionUserId },
+              update: { name: sessionName },
+              create: {
+                id: sessionUserId,
+                name: sessionName,
+              },
+            });
+
+        return tx.patient.upsert({
+          where: { userId: user.id },
+          update: {},
+          create: {
+            userId: user.id,
+            onboardingCompleted: true,
+          },
+        });
       });
 
       console.log("Paciente ID:", patient.id);
@@ -51,8 +75,23 @@ export const telemedicineRouter = createTRPCRouter({
 
   // Paciente: Consultar estado de su llamada
   getActiveCall: protectedProcedure.query(async ({ ctx }) => {
+    const sessionUserId = ctx.session.user.id;
+    const sessionEmail = ctx.session.user.email ?? null;
+
+    const user = await ctx.db.user.findFirst({
+      where: {
+        OR: [
+          { id: sessionUserId },
+          ...(sessionEmail ? [{ email: sessionEmail }] : []),
+        ],
+      },
+      select: { id: true },
+    });
+
+    if (!user) return null;
+
     const patient = await ctx.db.patient.findUnique({
-      where: { userId: ctx.session.user.id },
+      where: { userId: user.id },
     });
 
     if (!patient) return null;
@@ -154,8 +193,23 @@ export const telemedicineRouter = createTRPCRouter({
       comment: z.string().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
+      const sessionUserId = ctx.session.user.id;
+      const sessionEmail = ctx.session.user.email ?? null;
+
+      const user = await ctx.db.user.findFirst({
+        where: {
+          OR: [
+            { id: sessionUserId },
+            ...(sessionEmail ? [{ email: sessionEmail }] : []),
+          ],
+        },
+        select: { id: true },
+      });
+
+      if (!user) throw new Error("No se encontró el usuario autenticado.");
+
       const patient = await ctx.db.patient.findUnique({
-          where: { userId: ctx.session.user.id }
+          where: { userId: user.id }
       });
       if (!patient) throw new Error("No se encontró el perfil de paciente.");
 
