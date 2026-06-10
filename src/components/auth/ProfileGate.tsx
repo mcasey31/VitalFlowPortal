@@ -11,6 +11,7 @@ export function ProfileGate({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
+    const safePathname = pathname ?? "";
 
     useEffect(() => {
         setMounted(true);
@@ -24,12 +25,12 @@ export function ProfileGate({ children }: { children: React.ReactNode }) {
 
     // Rutas que no deben ser procesadas por la lógica de pacientes (públicas, staff o admin)
     const isExcludedRoute = 
-        pathname === "/" || 
-        pathname === "/landing" ||
-        pathname === "/quantum-home" ||
-        pathname.startsWith("/auth") || 
-        pathname.startsWith("/staff") || 
-        pathname.startsWith("/admin");
+        safePathname === "/" || 
+        safePathname === "/landing" ||
+        safePathname === "/quantum-home" ||
+        safePathname.startsWith("/auth") || 
+        safePathname.startsWith("/staff") || 
+        safePathname.startsWith("/admin");
 
     useEffect(() => {
         if (!mounted) return;
@@ -39,14 +40,14 @@ export function ProfileGate({ children }: { children: React.ReactNode }) {
             return;
         }
 
-        if (patient && !patient.onboardingCompleted && pathname !== "/onboarding" && !isExcludedRoute) {
+        if (patient && !patient.onboardingCompleted && safePathname !== "/onboarding" && !isExcludedRoute) {
             router.push("/onboarding");
         }
         
-        if (patient?.onboardingCompleted && pathname === "/onboarding") {
+        if (patient?.onboardingCompleted && safePathname === "/onboarding") {
             router.push("/dashboard");
         }
-    }, [status, patient, pathname, router, isExcludedRoute, mounted]);
+    }, [status, patient, safePathname, router, isExcludedRoute, mounted]);
 
     // Si no está montado, devolvemos nada para evitar el Hydration Mismatch
     if (!mounted) return null;
