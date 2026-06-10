@@ -26,6 +26,14 @@ export default function PatientSignInPage() {
           </div>
 
           <div className="space-y-6">
+            <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4 text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest text-indigo-700">Acceso por Perfil</p>
+              <p className="text-xs text-slate-600 mt-1">Esta pantalla es para pacientes. Si sos profesional, usa el Portal Medicos.</p>
+              <Link href="/staff/login" className="inline-block mt-3 text-[11px] font-black uppercase tracking-widest text-indigo-700 hover:text-indigo-900">
+                Ir a Portal Medicos
+              </Link>
+            </div>
+
              <button 
               onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
               className="w-full flex items-center justify-center gap-4 bg-white hover:bg-slate-50 text-slate-700 font-bold py-4 px-6 rounded-2xl border-2 border-slate-100 transition-all active:scale-[0.98] shadow-sm hover:shadow-md"

@@ -11,6 +11,7 @@ import {
   Lock,
   CheckCircle
 } from "lucide-react";
+import Link from "next/link";
 
 export default function CorporateLandingPage() {
   return (
@@ -38,13 +39,13 @@ export default function CorporateLandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto px-10 py-5 bg-slate-900 text-white font-black rounded-[1.5rem] text-sm uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-3 group">
-              Empezar Ahora
+            <Link href="/auth/signin" className="w-full sm:w-auto px-10 py-5 bg-slate-900 text-white font-black rounded-[1.5rem] text-sm uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-3 group">
+              Portal Pacientes
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="w-full sm:w-auto px-10 py-5 bg-white text-slate-900 font-black rounded-[1.5rem] text-sm uppercase tracking-widest border border-slate-200 hover:border-indigo-600 transition-all">
-              Ver Demo
-            </button>
+            </Link>
+            <Link href="/staff/login" className="w-full sm:w-auto px-10 py-5 bg-white text-slate-900 font-black rounded-[1.5rem] text-sm uppercase tracking-widest border border-slate-200 hover:border-indigo-600 transition-all text-center">
+              Portal Medicos
+            </Link>
           </div>
         </div>
 
@@ -60,6 +61,42 @@ export default function CorporateLandingPage() {
           {/* Decorative Orbs */}
           <div className="absolute -top-10 -right-10 h-40 w-40 bg-indigo-400/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 h-60 w-60 bg-blue-400/10 rounded-full blur-3xl" />
+        </div>
+      </section>
+
+      {/* Platform Access */}
+      <section id="accesos" className="py-20 px-6 bg-white border-y border-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">Accesos Claros Por Perfil</p>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter italic uppercase mt-4">Elige Tu Plataforma</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Link href="/auth/signin" className="rounded-[2rem] border border-emerald-100 bg-emerald-50/50 p-8 hover:-translate-y-1 transition-all hover:shadow-xl hover:shadow-emerald-100/60">
+              <div className="inline-flex items-center gap-2 text-emerald-700 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <Smartphone className="w-4 h-4" /> Pacientes
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-3">Portal de Pacientes</h3>
+              <p className="text-slate-600 text-sm">Turnos, estudios, recetas y seguimiento personal de salud.</p>
+            </Link>
+
+            <Link href="/staff/login" className="rounded-[2rem] border border-indigo-100 bg-indigo-50/50 p-8 hover:-translate-y-1 transition-all hover:shadow-xl hover:shadow-indigo-100/60">
+              <div className="inline-flex items-center gap-2 text-indigo-700 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <Activity className="w-4 h-4" /> Medicos
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-3">Consola Medica</h3>
+              <p className="text-slate-600 text-sm">Guardia, telemedicina, historia clínica y flujo asistencial.</p>
+            </Link>
+
+            <Link href="/admin" className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8 hover:-translate-y-1 transition-all hover:shadow-xl hover:shadow-slate-200/60">
+              <div className="inline-flex items-center gap-2 text-slate-700 text-[10px] font-black uppercase tracking-[0.2em] mb-4">
+                <LayoutDashboard className="w-4 h-4" /> Institucional
+              </div>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-3">Panel B2B</h3>
+              <p className="text-slate-600 text-sm">Gestión de sedes, staff, branding y administración de la institución.</p>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -211,9 +248,9 @@ export default function CorporateLandingPage() {
             <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto">
               Gestione su institución, configure sedes, administre profesionales y analice el rendimiento de su guardia desde una sola consola.
             </p>
-            <button className="px-12 py-5 bg-indigo-600 text-white font-black rounded-[1.5rem] text-sm uppercase tracking-widest hover:bg-slate-900 transition-all shadow-xl shadow-indigo-600/20">
+            <Link href="/admin" className="inline-block px-12 py-5 bg-indigo-600 text-white font-black rounded-[1.5rem] text-sm uppercase tracking-widest hover:bg-slate-900 transition-all shadow-xl shadow-indigo-600/20">
                 Ingresar al Portal Institucional
-            </button>
+            </Link>
         </div>
       </section>
     </div>

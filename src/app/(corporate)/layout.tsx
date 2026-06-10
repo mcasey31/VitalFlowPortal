@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import { type Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "VitalPlus Health | Transformación Digital en Salud",
@@ -26,17 +27,20 @@ export default function CorporateLayout({
           
           <div className="hidden md:flex items-center gap-10">
             <a href="#soluciones" className="text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest">Soluciones</a>
-            <a href="#instituciones" className="text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest">Instituciones</a>
+            <a href="#accesos" className="text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest">Accesos</a>
             <a href="#contacto" className="text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors uppercase tracking-widest">Contacto</a>
           </div>
 
           <div className="flex items-center gap-4">
-            <a href="/admin" className="px-6 py-2.5 text-sm font-black text-indigo-600 uppercase tracking-widest hover:bg-indigo-50 rounded-xl transition-all">
-              Acceso Clientes
-            </a>
-            <button className="px-6 py-2.5 text-sm font-black bg-slate-900 text-white uppercase tracking-widest rounded-xl hover:bg-indigo-600 transition-all shadow-xl shadow-slate-900/10">
-              Agendar Demo
-            </button>
+            <Link href="/auth/signin" className="hidden sm:block px-4 py-2.5 text-[10px] font-black text-emerald-700 uppercase tracking-widest hover:bg-emerald-50 rounded-xl transition-all">
+              Pacientes
+            </Link>
+            <Link href="/staff/login" className="hidden sm:block px-4 py-2.5 text-[10px] font-black text-indigo-700 uppercase tracking-widest hover:bg-indigo-50 rounded-xl transition-all">
+              Medicos
+            </Link>
+            <Link href="/admin" className="px-6 py-2.5 text-sm font-black bg-slate-900 text-white uppercase tracking-widest rounded-xl hover:bg-indigo-600 transition-all shadow-xl shadow-slate-900/10">
+              Institucional
+            </Link>
           </div>
         </div>
       </nav>
