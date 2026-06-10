@@ -1,29 +1,86 @@
-# Create T3 App
+# PRM Platform - Dockerized Architecture
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Este repositorio queda dividido en tres componentes desacoplados para ejecucion local y despliegue por contenedores:
 
-## What's next? How do I make an app with this?
+- Frontend: React nativo (Vite + Nginx)
+- Backend: Next.js (API, auth, tRPC, Prisma)
+- Database: PostgreSQL 16
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Arquitectura
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- Frontend expone `http://localhost:3000`
+- Backend expone `http://localhost:3001`
+- Base de datos expone `localhost:5432`
+- El frontend proxya `/api/*` hacia el backend, por lo que el cliente React consume backend por mismo origen (`/api`).
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Requisitos
 
-## Learn More
+- Docker Desktop (o Docker Engine + Compose)
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Levantar con Docker
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1. Configura variables de entorno sensibles en tu shell:
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```bash
+set AUTH_SECRET=tu_secret_fuerte
+set AUTH_GOOGLE_ID=tu_google_client_id
+set AUTH_GOOGLE_SECRET=tu_google_client_secret
+```
 
-## How do I deploy this?
+2. Construye e inicia todo el stack:
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+```bash
+docker compose up --build -d
+```
+
+3. Verifica contenedores:
+
+```bash
+docker compose ps
+```
+
+4. Ver logs (si hace falta):
+
+```bash
+docker compose logs -f frontend backend db
+```
+
+## Parar y limpiar
+
+```bash
+docker compose down
+```
+
+Para borrar tambien el volumen de datos:
+
+```bash
+docker compose down -v
+```
+
+## Estructura agregada
+
+- `frontend/`: app React nativa (Vite)
+- `frontend/Dockerfile`: build y serving del frontend con Nginx
+- `Dockerfile.backend`: build y runtime del backend
+- `docker/nginx/default.conf`: proxy `/api` al backend
+- `docker-compose.yml`: orquestacion de frontend/backend/db
+
+## Publicar en GitHub
+
+1. Crea un repositorio vacio en GitHub.
+2. En local:
+
+```bash
+git add .
+git commit -m "feat: dockerize app with separated react frontend, backend and db"
+git branch -M main
+git remote add origin https://github.com/<tu-usuario>/<tu-repo>.git
+git push -u origin main
+```
+
+Si ya existe un remote `origin`, actualizalo:
+
+```bash
+git remote set-url origin https://github.com/<tu-usuario>/<tu-repo>.git
+git push -u origin main
+```
